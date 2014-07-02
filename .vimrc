@@ -148,6 +148,9 @@ Plugin 'gmarik/Vundle.vim'
 
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'kien/ctrlp.vim'
+Plugin 'closetag.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'The-NERD-tree'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -181,3 +184,8 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 let g:Powerline_symbols = 'fancy'
+
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+
+nmap \e :NERDTreeToggle<CR>
