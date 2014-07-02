@@ -14,7 +14,7 @@ for FILE in $FILES; do
 	if [ $IGNORE_FLAG == false ] &&  [ -e $ROOT/$FILE ]; then
 		if [ $ROOT_FILE -nt $FILE  ]; then
 		  echo "Updating $ROOT_FILE => $FILE..."
-		  cp -R $ROOT_FILE $FILE
+		  cp -R $ROOT_FILE .
 		else
 		  echo "Ignoring $FILE because it was not modified"
 		fi
