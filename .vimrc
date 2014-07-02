@@ -147,6 +147,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'Lokaltog/vim-powerline'
+Plugin 'kien/ctrlp.vim'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
