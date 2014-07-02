@@ -151,6 +151,7 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'closetag.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'The-NERD-tree'
+Plugin 'flazz/vim-colorschemes'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -189,3 +190,9 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 
 nmap \e :NERDTreeToggle<CR>
+
+if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
+  set t_Co=256
+endif
+
+colorscheme twilight256
