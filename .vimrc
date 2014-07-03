@@ -132,6 +132,7 @@ set ttymouse=xterm2
 " Mappings 
 nmap \l :setlocal number!<CR>
 nmap \o :set paste!<CR>
+nmap \h :noh<CR>
 
 " Vundle
 set nocompatible              " be iMproved, required
@@ -151,13 +152,13 @@ Plugin 'oblitum/rainbow'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'kien/ctrlp.vim'
 Plugin 'closetag.vim'
-Plugin 'scrooloose/syntastic'
 Plugin 'The-NERD-tree'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'Conque-Shell'
 Plugin 'notes.vim'
 Plugin 'surround.vim'
 Plugin 'vim-scripts/SuperTab--Van-Dewoestine'
+"Plugin 'scrooloose/syntastic'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -203,4 +204,4 @@ if $TERM == 'xterm-256color' || $TERM == 'screen-256color' || $COLORTERM == 'gno
   set t_Co=256
 endif
 
-colorscheme wombat256 
+colorscheme twilight256
