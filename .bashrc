@@ -83,3 +83,5 @@ On_IWhite='\e[0;107m'   # White
 source ~/.git-prompt.sh
 
 PS1="\[$Green\]\t\[$Red\]-\[$Cyan\]\u\[$Yellow\]\[$Yellow\]\w\[\033[m\]\[$Magenta\]\$(__git_ps1)\[$White\]\$ "
+
+complete -C ~/.rake_completion.rb -o default rake

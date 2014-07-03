@@ -152,6 +152,7 @@ Plugin 'closetag.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'The-NERD-tree'
 Plugin 'flazz/vim-colorschemes'
+Plugin 'Conque-Shell'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
