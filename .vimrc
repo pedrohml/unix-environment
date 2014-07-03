@@ -146,6 +146,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
+Plugin 'xolox/vim-misc'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'kien/ctrlp.vim'
 Plugin 'closetag.vim'
@@ -195,7 +196,7 @@ let g:ctrlp_cmd = 'CtrlP'
 
 nmap \e :NERDTreeToggle<CR>
 
-if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
+if $TERM == 'xterm-256color' || $TERM == 'screen-256color' || $COLORTERM == 'gnome-terminal'
   set t_Co=256
 endif
 
