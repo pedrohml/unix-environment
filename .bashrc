@@ -85,3 +85,15 @@ source ~/.git-prompt.sh
 PS1="\[$Green\]\t\[$Red\]-\[$Cyan\]\u\[$Yellow\]\[$Yellow\]\w\[\033[m\]\[$Magenta\]\$(__git_ps1)\[$White\]\$ "
 
 complete -C ~/.rake_completion.rb -o default rake
+
+alias bdb='$(make -C $HOME/bomnegocio rinfo | grep -e "^psql")'
+alias redis_account='$(make rinfo | grep "redis accounts server" | perl -pe "s/ - redis accounts server//g")'
+alias redis_linkmanager='$(make rinfo | grep "redis link manager server" | perl -F"\s+-\s+" -nale "print @F[0]")'
+alias redis_paymentapi='$(make rinfo | grep "redis payment api server" | perl -F"\s+-\s+" -nale "print @F[0]")'
+alias redis_mobile='$(make rinfo | grep "redismobile server" | perl -F"\s+-\s+" -nale "print @F[0]")'
+alias redis_fav='$(make rinfo | grep "redis favorites server" | perl -F"\s+-\s+" -nale "print @F[0]")'
+alias flushdb='echo flushdb | redis_account'
+alias makesfa='make -C ~/bomnegocio rc kill cleandir++ && ~/bomnegocio/compile.sh && make -C ~/bomnegocio rall'
+alias gerastage='make -C ~/bomnegocio rc kill && make -C ~/bomnegocio cleandir++ && rm -rf rpm/{ia32e,noarch} && make -C ~/bomnegocio rpm-staging'
+alias bdbstage='psql -h 172.16.1.59 -U postgres blocketdb'
+alias liga_xiti='trans bconf_overwrite key:*.*.common.stat_counter.xiti.display value:1 && make apache-regress-restart'

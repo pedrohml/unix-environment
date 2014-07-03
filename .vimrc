@@ -147,6 +147,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'xolox/vim-misc'
+Plugin 'oblitum/rainbow'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'kien/ctrlp.vim'
 Plugin 'closetag.vim'
@@ -193,6 +194,8 @@ let g:Powerline_symbols = 'fancy'
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+let g:ctrlp_use_caching = 0
 
 nmap \e :NERDTreeToggle<CR>
 
@@ -200,4 +203,4 @@ if $TERM == 'xterm-256color' || $TERM == 'screen-256color' || $COLORTERM == 'gno
   set t_Co=256
 endif
 
-colorscheme twilight256
+colorscheme wombat256 
