@@ -156,7 +156,7 @@ Plugin 'flazz/vim-colorschemes'
 Plugin 'Conque-Shell'
 Plugin 'notes.vim'
 Plugin 'surround.vim'
-
+Plugin 'vim-scripts/SuperTab--Van-Dewoestine'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
