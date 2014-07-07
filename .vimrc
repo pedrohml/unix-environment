@@ -133,6 +133,7 @@ set ttymouse=xterm2
 nmap \l :setlocal number!<CR>
 nmap \o :set paste!<CR>
 nmap \h :noh<CR>
+nmap \q :bd<CR>
 
 " Vundle
 set nocompatible              " be iMproved, required
