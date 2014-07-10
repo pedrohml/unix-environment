@@ -158,8 +158,10 @@ Plugin 'flazz/vim-colorschemes'
 Plugin 'Conque-Shell'
 Plugin 'notes.vim'
 Plugin 'surround.vim'
-Plugin 'vim-scripts/SuperTab--Van-Dewoestine'
+Plugin 'vim-scripts/supertab--van-dewoestine'
+Plugin 'tpope/vim-fugitive'
 "Plugin 'scrooloose/syntastic'
+
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -206,3 +208,8 @@ if $TERM == 'xterm-256color' || $TERM == 'screen-256color' || $COLORTERM == 'gno
 endif
 
 colorscheme twilight256
+
+au BufNewFile,BufRead bconf.txt.* set filetype=cfg
+au BufNewFile,BufRead bconf.txt set filetype=cfg
+au BufNewFile,BufRead *.pgsql set filetype=sql
+

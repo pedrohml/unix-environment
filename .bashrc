@@ -97,3 +97,5 @@ alias makesfa='make -C ~/bomnegocio rc kill cleandir++ && ~/bomnegocio/compile.s
 alias gerastage='make -C ~/bomnegocio rc kill && make -C ~/bomnegocio cleandir++ && rm -rf rpm/{ia32e,noarch} && make -C ~/bomnegocio rpm-staging'
 alias bdbstage='psql -h 172.16.1.59 -U postgres blocketdb'
 alias liga_xiti='trans bconf_overwrite key:*.*.common.stat_counter.xiti.display value:1 && make apache-regress-restart'
+
+export PSQL_EDITOR='vim +"set syntax=sql" '
