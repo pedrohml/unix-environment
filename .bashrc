@@ -7,6 +7,25 @@ fi
 
 # User specific aliases and functions
 
+# git branch
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+function apagabranch() {
+	git push origin :$1
+	git branch -D $1
+	echo git branch -D $1
+}
+# Helper function to get regress ports
+function genport() {
+	echo $(expr \( $(id -u) - \( $(id -u) / 100 \) \* 100 \) \* 200 + 20000 + ${1})
+}
+function trans() {
+	trans_port=$(genport 5)
+	printf "cmd:$(echo "$@" | tr ' ' '\n' | tr '\#' ' ')\ncommit:1\nend\n---\n"
+	printf "cmd:$(echo "$@" | tr ' ' '\n' | tr '\#' ' ')\ncommit:1\nend\n" | nc localhost ${trans_port}
+}
+
 # Reset
 Color_Off='\e[0m'       # Text Reset
 
@@ -97,5 +116,9 @@ alias makesfa='make -C ~/bomnegocio rc kill cleandir++ && ~/bomnegocio/compile.s
 alias gerastage='make -C ~/bomnegocio rc kill && make -C ~/bomnegocio cleandir++ && rm -rf rpm/{ia32e,noarch} && make -C ~/bomnegocio rpm-staging'
 alias bdbstage='psql -h 172.16.1.59 -U postgres blocketdb'
 alias liga_xiti='trans bconf_overwrite key:*.*.common.stat_counter.xiti.display value:1 && make apache-regress-restart'
+alias pega="git fetch origin; git pull --rebase origin \$(parse_git_branch)"
+alias manda="git push origin \$(parse_git_branch)"
+alias desfaztudo="git reset --hard origin/\$(parse_git_branch)"
+alias bdbstage='psql -h 172.16.1.59 -U postgres blocketdb'
 
 export PSQL_EDITOR='vim +"set syntax=sql" '
