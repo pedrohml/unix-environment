@@ -120,5 +120,7 @@ alias pega="git fetch origin; git pull --rebase origin \$(parse_git_branch)"
 alias manda="git push origin \$(parse_git_branch)"
 alias desfaztudo="git reset --hard origin/\$(parse_git_branch)"
 alias bdbstage='psql -h 172.16.1.59 -U postgres blocketdb'
+alias testapi='rake firefox test `find spec/api/ -type f`'
+alias testtrans='rake test `find spec/transactions/ -type f`'
 
 export PSQL_EDITOR='vim +"set syntax=sql" '
