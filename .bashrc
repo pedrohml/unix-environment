@@ -25,6 +25,38 @@ function trans() {
 	printf "cmd:$(echo "$@" | tr ' ' '\n' | tr '\#' ' ')\ncommit:1\nend\n---\n"
 	printf "cmd:$(echo "$@" | tr ' ' '\n' | tr '\#' ' ')\ncommit:1\nend\n" | nc localhost ${trans_port}
 }
+function get_ip(){
+	ifconfig | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' | head -1
+}
+function bdb_cmd(){
+	echo "$(make -C $HOME/bomnegocio rinfo 2>/dev/null| grep -e '^psql')"
+}
+function generate_dev_token(){
+	curl -X POST -d "username=dev&cpasswd=&login=Login" -k https://dev03c6.srv.office:23811/controlpanel
+}
+function last_dev_token(){
+	generate_dev_token
+	$(bdb_cmd) -tc 'select token from tokens where admin_id=9999 order by created_at desc limit 1' | tr -d '\n '
+}
+function last_ad(){
+	$(bdb_cmd) -tc 'select ad_id from ads order by ad_id desc limit 1' | tr -d '\n '
+}
+function last_unreview_ad(){
+	$(bdb_cmd) -tc "select ad_id from ad_actions where state='pending_review' order by ad_id desc limit 1" | tr -d '\n '
+}
+function review_ad(){
+	ad_id=$1
+	last_action_id=$($(bdb_cmd) -tc 'select action_id from ad_actions where ad_id='$ad_id' order by action_id desc limit 1' | tr -d '\n ')
+	token=$(last_dev_token)
+	trans review ad_id:$ad_id action_id:$last_action_id action:accept remote_addr:$(get_ip) filter_name:accepted token:$token
+}
+function review_last_ad(){
+	if [[ $(last_unreview_ad | wc -c) > 0 ]]; then
+	  review_ad $(last_unreview_ad)
+	else
+	  echo "OOPS: There is not ad in the pending review queue"
+	fi
+}
 
 # Reset
 Color_Off='\e[0m'       # Text Reset
@@ -105,7 +137,8 @@ PS1="\[$Green\]\t\[$Red\]-\[$Cyan\]\u\[$Yellow\]\[$Yellow\]\w\[\033[m\]\[$Magent
 
 complete -C ~/.rake_completion.rb -o default rake
 
-alias bdb='$(make -C $HOME/bomnegocio rinfo | grep -e "^psql")'
+alias bdb='$(bdb_cmd)'
+alias bdbstage='psql -h 172.16.1.59 -U postgres blocketdb'
 alias redis_account='$(make rinfo | grep "redis accounts server" | perl -pe "s/ - redis accounts server//g")'
 alias redis_linkmanager='$(make rinfo | grep "redis link manager server" | perl -F"\s+-\s+" -nale "print @F[0]")'
 alias redis_paymentapi='$(make rinfo | grep "redis payment api server" | perl -F"\s+-\s+" -nale "print @F[0]")'
@@ -114,12 +147,10 @@ alias redis_fav='$(make rinfo | grep "redis favorites server" | perl -F"\s+-\s+"
 alias flushdb='echo flushdb | redis_account'
 alias makesfa='make -C ~/bomnegocio rc kill cleandir++ && ~/bomnegocio/compile.sh && make -C ~/bomnegocio rall'
 alias gerastage='make -C ~/bomnegocio rc kill && make -C ~/bomnegocio cleandir++ && rm -rf rpm/{ia32e,noarch} && make -C ~/bomnegocio rpm-staging'
-alias bdbstage='psql -h 172.16.1.59 -U postgres blocketdb'
 alias liga_xiti='trans bconf_overwrite key:*.*.common.stat_counter.xiti.display value:1 && make apache-regress-restart'
 alias pega="git fetch origin; git pull --rebase origin \$(parse_git_branch)"
 alias manda="git push origin \$(parse_git_branch)"
 alias desfaztudo="git reset --hard origin/\$(parse_git_branch)"
-alias bdbstage='psql -h 172.16.1.59 -U postgres blocketdb'
 alias testapi='rake firefox test `find spec/api/ -type f`'
 alias testtrans='rake test `find spec/transactions/ -type f`'
 
