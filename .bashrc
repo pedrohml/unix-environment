@@ -33,9 +33,9 @@ function bdb_cmd(){
 }
 function generate_dev_token(){
 	curl -X POST -d "username=dev&cpasswd=&login=Login" -k https://dev03c6.srv.office:23811/controlpanel
+	last_dev_token
 }
 function last_dev_token(){
-	generate_dev_token
 	$(bdb_cmd) -tc 'select token from tokens where admin_id=9999 order by created_at desc limit 1' | tr -d '\n '
 }
 function last_ad(){
@@ -47,14 +47,14 @@ function last_unreview_ad(){
 function review_ad(){
 	ad_id=$1
 	last_action_id=$($(bdb_cmd) -tc 'select action_id from ad_actions where ad_id='$ad_id' order by action_id desc limit 1' | tr -d '\n ')
-	token=$(last_dev_token)
-	trans review ad_id:$ad_id action_id:$last_action_id action:accept remote_addr:$(get_ip) filter_name:accepted token:$token
+	token=$(generate_dev_token)
+	trans review token:$token ad_id:$ad_id action_id:$last_action_id remote_addr:$(get_ip) action:accept filter_name:accepted
 }
 function review_last_ad(){
 	if [[ $(last_unreview_ad | wc -c) > 0 ]]; then
 	  review_ad $(last_unreview_ad)
 	else
-	  echo "OOPS: There is not ad in the pending review queue"
+	  echo "WARNING: There is not ad in the pending review queue"
 	fi
 }
 
