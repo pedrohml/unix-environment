@@ -43,7 +43,7 @@ au FileType c,cpp,objc,objcpp call rainbow#load()
 " #######################
 " # PRETTY TAB NUMBERS! #
 set tabline=%!MyTabLine()
-function MyTabLine()
+function! MyTabLine()
   let s = '' " complete tabline goes here
   " loop through each tab page
   for t in range(tabpagenr('$'))
@@ -117,23 +117,26 @@ autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
 highlight EOLWS ctermbg=red guibg=red
 
 ab phpbacktrace $e = new Exception;<CR>var_dump($e->getTraceAsString());<CR>die()<CR>
-iabbrev <silent> <buffer> phpprintr echo "<pre>";<CR>print_r();<CR>echo "</pre>";<CR>die();<CR>
-iabbrev <silent> <buffer> phpvardump echo "<pre>";<CR>var_dump();<CR>echo "</pre>";<CR>die();<CR>
-
+iabbrev phpprintr echo "<pre>";<CR>print_r();<CR>echo "</pre>";<CR>die();<CR>
+iabbrev phpvardump echo "<pre>";<CR>var_dump();<CR>echo "</pre>";<CR>die();<CR>
+iabbrev tmplvardump <% %* => %[%*]<%(@# > 0), @[%%*]%>\n %>
 
 " select when using the mouse
 set selectmode=mouse
-
 
 " Mouse scroll/select
 set mouse=a
 set ttymouse=xterm2
 
-" Mappings 
+" Mappings
 nmap \l :setlocal number!<CR>
 nmap \o :set paste!<CR>
 nmap \h :noh<CR>
 nmap \q :bd<CR>
+nmap \t :set list!<CR>
+nmap \u1 :/\s\+$<CR>
+nmap \u2 :/ \+\ze\t<CR>
+nmap \u3 :/\t\zs \+\ze<CR>
 
 " Vundle
 set nocompatible              " be iMproved, required
@@ -204,7 +207,7 @@ let g:ctrlp_use_caching = 0
 nmap \e :NERDTreeToggle<CR>
 
 if $TERM == 'xterm-256color' || $TERM == 'screen-256color' || $COLORTERM == 'gnome-terminal'
-  set t_Co=256
+	set t_Co=256
 endif
 
 colorscheme twilight256
@@ -213,3 +216,6 @@ au BufNewFile,BufRead bconf.txt.* set filetype=cfg
 au BufNewFile,BufRead bconf.txt set filetype=cfg
 au BufNewFile,BufRead *.pgsql set filetype=sql
 
+set list listchars=tab:»·,trail:·
+set list!
+hi SpecialKey cterm=NONE ctermfg=darkgray gui=NONE guifg=darkgray

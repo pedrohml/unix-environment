@@ -42,7 +42,7 @@ function last_ad(){
 	$(bdb_cmd) -tc 'select ad_id from ads order by ad_id desc limit 1' | tr -d '\n '
 }
 function last_unreview_ad(){
-	$(bdb_cmd) -tc "select ad_id from ad_actions where state='pending_review' order by ad_id desc limit 1" | tr -d '\n '
+	$(bdb_cmd) -tc "select ad_id from ad_actions where state in ('pending_review', 'locked') order by ad_id desc limit 1" | tr -d '\n '
 }
 function review_ad(){
 	ad_id=$1
@@ -155,3 +155,8 @@ alias testapi='rake firefox test `find spec/api/ -type f`'
 alias testtrans='rake test `find spec/transactions/ -type f`'
 
 export PSQL_EDITOR='vim +"set syntax=sql" '
+
+alias joia='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_from_production remote_addr:127.0.0.1 $token'
+alias superjoia='make rall && bdb < release.txt && > regress_final/logs/trans.log && joia'
+alias joiainvbconf='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_to_bconf_production remote_addr:127.0.0.1 $token'
+alias joiainvdb='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_to_database_production deploy_id:1 remote_addr:127.0.0.1 $token'
