@@ -154,9 +154,11 @@ alias desfaztudo="git reset --hard origin/\$(parse_git_branch)"
 alias testapi='rake firefox test `find spec/api/ -type f`'
 alias testtrans='rake test `find spec/transactions/ -type f`'
 
+export PAGER="less"
 export PSQL_EDITOR='vim +"set syntax=sql" '
+export GREP_OPTIONS='--color=auto'
 
 alias joia='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_from_production remote_addr:127.0.0.1 $token'
 alias superjoia='make rall && bdb < release.txt && > regress_final/logs/trans.log && joia'
-alias joiainvbconf='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_to_bconf_production remote_addr:127.0.0.1 $token'
+alias joiainvbconf='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_to_bconf_production deploy_id:1 remote_addr:127.0.0.1 $token'
 alias joiainvdb='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_to_database_production deploy_id:1 remote_addr:127.0.0.1 $token'
