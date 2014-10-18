@@ -159,8 +159,7 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-
+" Plugin 'gmarik/Vundle.vim'
 Plugin 'xolox/vim-misc'
 Plugin 'oblitum/rainbow'
 Plugin 'Lokaltog/vim-powerline'
@@ -173,6 +172,7 @@ Plugin 'notes.vim'
 Plugin 'surround.vim'
 Plugin 'vim-scripts/supertab--van-dewoestine'
 Plugin 'tpope/vim-fugitive'
+Plugin 'kchmck/vim-coffee-script'
 "Plugin 'scrooloose/syntastic'
 
 
@@ -229,3 +229,10 @@ au BufNewFile,BufRead *.pgsql set filetype=sql
 set list listchars=tab:»·,trail:·
 set list!
 hi SpecialKey cterm=NONE ctermfg=darkgray gui=NONE guifg=darkgray
+
+function! s:rename_file(new_file_path)
+	execute 'saveas ' . a:new_file_path
+	call delete(expand('#:p'))
+	bd #
+endfunction
+command! -nargs=1 -complete=file Rename call <SID>rename_file(<f-args>)
