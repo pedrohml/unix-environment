@@ -29,7 +29,7 @@ function get_ip(){
 	ifconfig | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' | head -1
 }
 function bdb_cmd(){
-	echo "$(make -C $HOME/bomnegocio rinfo 2>/dev/null| grep -e '^psql')"
+	echo "$(make -C $HOME/bomnegocio rinfo 2>/dev/null| grep -e '^psql' |tr ';' ' ')"
 }
 function generate_dev_token(){
 	curl -X POST -d "username=dev&cpasswd=&login=Login" -k https://dev03c6.srv.office:23811/controlpanel
@@ -162,3 +162,5 @@ alias joia='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255b
 alias superjoia='make rall && bdb < release.txt && > regress_final/logs/trans.log && joia'
 alias joiainvbconf='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_to_bconf_production deploy_id:1 remote_addr:127.0.0.1 $token'
 alias joiainvdb='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_to_database_production deploy_id:1 remote_addr:127.0.0.1 $token'
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting

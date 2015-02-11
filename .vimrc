@@ -111,6 +111,7 @@ endfunction
 " END PRETTY TAB NUMBERS!
 " #######################
 
+command! Myrc execute "e $MYVIMRC"
 command! UnMinify call UnMinify()
 function! UnMinify()
     %s/{\ze[^\r\n]/{\r/g
@@ -124,6 +125,7 @@ endfunction
 " highlight EOL whitespace
 autocmd InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
 autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
+autocmd FileType tmpl let b:surround_45 = "<% \r %>"
 highlight EOLWS ctermbg=red guibg=red
 
 ab phpbacktrace $e = new Exception;<CR>var_dump($e->getTraceAsString());<CR>die()<CR>
