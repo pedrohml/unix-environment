@@ -57,6 +57,20 @@ function review_last_ad(){
 	  echo "WARNING: There is not ad in the pending review queue"
 	fi
 }
+function testtrans(){
+	if [ -n "$1" ]; then
+		DISPLAY=:$(id -u) BROWSER=firefox bundle exec rspec -e "Legacy Trans Tests $1"
+	else
+		rake test $(find spec/transactions/ -type f)
+	fi
+}
+function testapi(){
+	if [ -n "$1" ]; then
+		DISPLAY=:$(id -u) BROWSER=firefox bundle exec rspec -e "Legacy API Tests $1"
+	else
+		rake firefox test $(find spec/api/ -type f)
+	fi
+}
 
 # Reset
 Color_Off='\e[0m'       # Text Reset
@@ -151,8 +165,6 @@ alias liga_xiti='trans bconf_overwrite key:*.*.common.stat_counter.xiti.display 
 alias pega="git fetch origin; git pull --rebase origin \$(parse_git_branch)"
 alias manda="git push origin \$(parse_git_branch)"
 alias desfaztudo="git reset --hard origin/\$(parse_git_branch)"
-alias testapi='rake firefox test `find spec/api/ -type f`'
-alias testtrans='rake test `find spec/transactions/ -type f`'
 
 export PAGER="less"
 export PSQL_EDITOR='vim +"set syntax=sql" '
