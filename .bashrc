@@ -6,6 +6,9 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # User specific aliases and functions
+function ggrepo() {
+	git grep $1 ${@:2} | grep -o -e $1
+}
 
 # git branch
 parse_git_branch() {
