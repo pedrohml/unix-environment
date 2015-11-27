@@ -14,11 +14,6 @@ function ggrepo() {
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
-function apagabranch() {
-	git push origin :$1
-	git branch -D $1
-	echo git branch -D $1
-}
 # Helper function to get regress ports
 function genport() {
 	echo $(expr \( $(id -u) - \( $(id -u) / 100 \) \* 100 \) \* 200 + 20000 + ${1})
@@ -33,32 +28,6 @@ function get_ip(){
 }
 function bdb_cmd(){
 	echo "$(make -C $HOME/bomnegocio rinfo 2>/dev/null| grep -e '^psql' |tr ';' ' ')"
-}
-function generate_dev_token(){
-	curl -X POST -d "username=dev&cpasswd=&login=Login" -k https://dev03c6.srv.office:23811/controlpanel
-	last_dev_token
-}
-function last_dev_token(){
-	$(bdb_cmd) -tc 'select token from tokens where admin_id=9999 order by created_at desc limit 1' | tr -d '\n '
-}
-function last_ad(){
-	$(bdb_cmd) -tc 'select ad_id from ads order by ad_id desc limit 1' | tr -d '\n '
-}
-function last_unreview_ad(){
-	$(bdb_cmd) -tc "select ad_id from ad_actions where state in ('pending_review', 'locked') order by ad_id desc limit 1" | tr -d '\n '
-}
-function review_ad(){
-	ad_id=$1
-	last_action_id=$($(bdb_cmd) -tc 'select action_id from ad_actions where ad_id='$ad_id' order by action_id desc limit 1' | tr -d '\n ')
-	token=$(generate_dev_token)
-	trans review token:$token ad_id:$ad_id action_id:$last_action_id remote_addr:$(get_ip) action:accept filter_name:accepted
-}
-function review_last_ad(){
-	if [[ $(last_unreview_ad | wc -c) > 0 ]]; then
-	  review_ad $(last_unreview_ad)
-	else
-	  echo "WARNING: There is not ad in the pending review queue"
-	fi
 }
 function testtrans(){
 	if [ -n "$1" ]; then
@@ -154,6 +123,7 @@ PS1="\[$Green\]\t\[$Red\]-\[$Cyan\]\u\[$Yellow\]\[$Yellow\]\w\[\033[m\]\[$Magent
 
 complete -C ~/.rake_completion.rb -o default rake
 
+alias grep='grep --color=auto'
 alias bdb='$(bdb_cmd)'
 alias bdbstage='psql -h 172.16.1.59 -U postgres blocketdb'
 alias redis_account='$(make rinfo | grep "redis accounts server" | perl -pe "s/ - redis accounts server//g")'
@@ -161,21 +131,8 @@ alias redis_linkmanager='$(make rinfo | grep "redis link manager server" | perl 
 alias redis_paymentapi='$(make rinfo | grep "redis payment api server" | perl -F"\s+-\s+" -nale "print @F[0]")'
 alias redis_mobile='$(make rinfo | grep "redismobile server" | perl -F"\s+-\s+" -nale "print @F[0]")'
 alias redis_fav='$(make rinfo | grep "redis favorites server" | perl -F"\s+-\s+" -nale "print @F[0]")'
-alias flushdb='echo flushdb | redis_account'
-alias makesfa='make -C ~/bomnegocio rc kill cleandir++ && ~/bomnegocio/compile.sh && make -C ~/bomnegocio rall'
-alias gerastage='make -C ~/bomnegocio rc kill && make -C ~/bomnegocio cleandir++ && rm -rf rpm/{ia32e,noarch} && make -C ~/bomnegocio rpm-staging'
-alias liga_xiti='trans bconf_overwrite key:*.*.common.stat_counter.xiti.display value:1 && make apache-regress-restart'
 alias pega="git fetch origin; git pull --rebase origin \$(parse_git_branch)"
 alias manda="git push origin \$(parse_git_branch)"
-alias desfaztudo="git reset --hard origin/\$(parse_git_branch)"
 
 export PAGER="less"
 export PSQL_EDITOR='vim +"set syntax=sql" '
-export GREP_OPTIONS='--color=auto'
-
-alias joia='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_from_production remote_addr:127.0.0.1 $token'
-alias superjoia='make rall && bdb < release.txt && > regress_final/logs/trans.log && joia'
-alias joiainvbconf='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_to_bconf_production deploy_id:1 remote_addr:127.0.0.1 $token'
-alias joiainvdb='token=$(trans authenticate username:dev passwd:da39a3ee5e6b4b0d3255bfef95601890afd80709 remote_addr:127.0.0.1 | grep token) && trans nb_tool_copy_to_database_production deploy_id:1 remote_addr:127.0.0.1 $token'
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
