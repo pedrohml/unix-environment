@@ -5,43 +5,9 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-# User specific aliases and functions
-function ggrepo() {
-	git grep $1 ${@:2} | grep -o -e $1
-}
-
 # git branch
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
-}
-# Helper function to get regress ports
-function genport() {
-	echo $(expr \( $(id -u) - \( $(id -u) / 100 \) \* 100 \) \* 200 + 20000 + ${1})
-}
-function trans() {
-	trans_port=$(genport 5)
-	printf "cmd:$(echo "$@" | tr ' ' '\n' | tr '\#' ' ')\ncommit:1\nend\n---\n"
-	printf "cmd:$(echo "$@" | tr ' ' '\n' | tr '\#' ' ')\ncommit:1\nend\n" | nc localhost ${trans_port}
-}
-function get_ip(){
-	ifconfig | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' | head -1
-}
-function bdb_cmd(){
-	echo "$(make -C $HOME/bomnegocio rinfo 2>/dev/null| grep -e '^psql' |tr ';' ' ')"
-}
-function testtrans(){
-	if [ -n "$1" ]; then
-		DISPLAY=:$(id -u) BROWSER=firefox bundle exec rspec -e "Legacy Trans Tests $1"
-	else
-		rake test $(find spec/transactions/ -type f)
-	fi
-}
-function testapi(){
-	if [ -n "$1" ]; then
-		DISPLAY=:$(id -u) BROWSER=firefox bundle exec rspec -e "Legacy API Tests $1"
-	else
-		rake firefox test $(find spec/api/ -type f)
-	fi
 }
 
 # Reset
@@ -124,15 +90,8 @@ PS1="\[$Green\]\t\[$Red\]-\[$Cyan\]\u\[$Yellow\]\[$Yellow\]\w\[\033[m\]\[$Magent
 complete -C ~/.rake_completion.rb -o default rake
 
 alias grep='grep --color=auto'
-alias bdb='$(bdb_cmd)'
-alias bdbstage='psql -h 172.16.1.59 -U postgres blocketdb'
-alias redis_account='$(make rinfo | grep "redis accounts server" | perl -pe "s/ - redis accounts server//g")'
-alias redis_linkmanager='$(make rinfo | grep "redis link manager server" | perl -F"\s+-\s+" -nale "print @F[0]")'
-alias redis_paymentapi='$(make rinfo | grep "redis payment api server" | perl -F"\s+-\s+" -nale "print @F[0]")'
-alias redis_mobile='$(make rinfo | grep "redismobile server" | perl -F"\s+-\s+" -nale "print @F[0]")'
-alias redis_fav='$(make rinfo | grep "redis favorites server" | perl -F"\s+-\s+" -nale "print @F[0]")'
 alias pega="git fetch origin; git pull --rebase origin \$(parse_git_branch)"
 alias manda="git push origin \$(parse_git_branch)"
+alias ls="ls -G"
 
 export PAGER="less"
-export PSQL_EDITOR='vim +"set syntax=sql" '
