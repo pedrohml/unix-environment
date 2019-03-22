@@ -1,5 +1,12 @@
 # .bashrc
 
+export HISTSIZE=10000
+export HISTFILESIZE=10000
+export HISTCONTROL=ignoredups
+export HISTIGNORE="ls:ps:history"
+PROMPT_COMMAND='history -a'
+shopt -s histappend
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
